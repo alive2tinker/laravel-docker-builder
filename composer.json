@@ -1,0 +1,64 @@
+{
+    "name": "alive2tinker/laravel-docker-builder",
+    "description": "Generate production-ready Docker configuration for Laravel applications",
+    "keywords": [
+        "laravel",
+        "docker",
+        "docker-compose",
+        "kubernetes",
+        "swarm",
+        "devops"
+    ],
+    "homepage": "https://github.com/alive2tinker/laravel-docker-builder",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "alive2tinker",
+            "email": "alive2tinker@users.noreply.github.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/contracts": "^10.0|^11.0|^12.0",
+        "illuminate/support": "^10.0|^11.0|^12.0",
+        "illuminate/console": "^10.0|^11.0|^12.0",
+        "illuminate/view": "^10.0|^11.0|^12.0",
+        "laravel/prompts": "^0.1|^0.2|^0.3"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "orchestra/testbench": "^8.0|^9.0|^10.0",
+        "pestphp/pest": "^2.0|^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Alive2Tinker\\DockerBuilder\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Alive2Tinker\\DockerBuilder\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Alive2Tinker\\DockerBuilder\\DockerBuilderServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
