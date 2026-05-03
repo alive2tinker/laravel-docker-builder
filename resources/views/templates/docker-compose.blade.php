@@ -19,6 +19,7 @@ services:
 @endif
 @endif
     environment:
+      - APP_KEY=${{ '{' }}APP_KEY{{ '}' }}
       - APP_ENV=${{ '{' }}APP_ENV:-production{{ '}' }}
       - APP_DEBUG=${{ '{' }}APP_DEBUG:-false{{ '}' }}
       - APP_URL=${{ '{' }}APP_URL{{ '}' }}
@@ -130,6 +131,7 @@ services:
       - redis
 @endif
     environment:
+      - APP_KEY=${{ '{' }}APP_KEY{{ '}' }}
       - APP_ENV=${{ '{' }}APP_ENV:-production{{ '}' }}
 @if($has_redis)
       - REDIS_HOST=redis
@@ -156,7 +158,33 @@ services:
     depends_on:
       - app
     environment:
+      - APP_KEY=${{ '{' }}APP_KEY{{ '}' }}
       - APP_ENV=${{ '{' }}APP_ENV:-production{{ '}' }}
+    volumes:
+      - .:/var/www/html
+    networks:
+      - {{ $app_name }}-network
+
+@endif
+@if($has_ssr)
+  #############################################
+  # Inertia SSR Service
+  #############################################
+  ssr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: {{ $app_name }}-ssr
+    restart: unless-stopped
+    command: php artisan inertia:start-ssr
+    depends_on:
+      - app
+    environment:
+      - APP_KEY=${{ '{' }}APP_KEY{{ '}' }}
+      - APP_ENV=${{ '{' }}APP_ENV:-production{{ '}' }}
+      - APP_URL=${{ '{' }}APP_URL{{ '}' }}
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
     volumes:
       - .:/var/www/html
     networks:

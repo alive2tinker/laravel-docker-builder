@@ -46,6 +46,11 @@ readonly class DockerConfigDTO
         return $this->hasService('scheduler');
     }
 
+    public function hasSsr(): bool
+    {
+        return $this->hasService('ssr');
+    }
+
     public function hasNode(): bool
     {
         return $this->nodeVersion !== null;

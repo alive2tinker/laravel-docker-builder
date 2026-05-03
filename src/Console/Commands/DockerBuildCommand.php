@@ -448,6 +448,7 @@ class DockerBuildCommand extends Command
             'node' => 'Node.js (asset compilation)',
             'worker' => 'Queue Worker (background jobs)',
             'scheduler' => 'Task Scheduler (cron)',
+            'ssr' => 'Inertia SSR (server-side rendering)',
             'mailpit' => 'Mailpit (local email testing)',
         ];
 
@@ -479,6 +480,7 @@ class DockerBuildCommand extends Command
                 ),
                 'worker' => ServiceDTO::worker(),
                 'scheduler' => ServiceDTO::scheduler(),
+                'ssr' => ServiceDTO::ssr(),
                 'mailpit' => ServiceDTO::mailpit(),
                 default => null,
             };
@@ -601,8 +603,8 @@ class DockerBuildCommand extends Command
 
         // Service ports
         foreach ($services as $service) {
-            if ($service->type === 'worker' || $service->type === 'scheduler' || $service->type === 'node') {
-                continue; // These don't expose ports
+            if (in_array($service->type, ['worker', 'scheduler', 'node', 'ssr'], true)) {
+                continue; // These don't expose ports externally
             }
 
             $defaultPort = (string) $service->getDefaultPort();

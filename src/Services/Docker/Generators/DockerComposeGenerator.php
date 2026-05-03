@@ -56,6 +56,7 @@ class DockerComposeGenerator extends AbstractFileGenerator
             'has_redis' => $this->config->hasRedis(),
             'has_worker' => $this->config->hasWorker(),
             'has_scheduler' => $this->config->hasScheduler(),
+            'has_ssr' => $this->config->hasSsr(),
             'ssl' => $this->config->ssl,
             'is_swarm' => $this->strategy instanceof DockerSwarmStrategy,
             'ports' => $this->config->ports,

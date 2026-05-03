@@ -36,6 +36,7 @@ services:
   app:
     image: ${{ '{' }}DOCKER_REGISTRY{{ '}' }}/{{ $app_name }}:${{ '{' }}IMAGE_TAG:-latest{{ '}' }}
     environment:
+      - APP_KEY=${{ '{' }}APP_KEY{{ '}' }}
       - APP_ENV=production
       - APP_DEBUG=false
       - PHP_OPCACHE_ENABLE=1
@@ -91,6 +92,7 @@ services:
     image: ${{ '{' }}DOCKER_REGISTRY{{ '}' }}/{{ $app_name }}:${{ '{' }}IMAGE_TAG:-latest{{ '}' }}
     command: php artisan queue:work --sleep=3 --tries=3 --max-time=3600
     environment:
+      - APP_KEY=${{ '{' }}APP_KEY{{ '}' }}
       - APP_ENV=production
       - APP_DEBUG=false
     volumes:
@@ -113,6 +115,7 @@ services:
     image: ${{ '{' }}DOCKER_REGISTRY{{ '}' }}/{{ $app_name }}:${{ '{' }}IMAGE_TAG:-latest{{ '}' }}
     command: php artisan schedule:work
     environment:
+      - APP_KEY=${{ '{' }}APP_KEY{{ '}' }}
       - APP_ENV=production
       - APP_DEBUG=false
     volumes:
@@ -125,6 +128,30 @@ services:
       placement:
         constraints:
           - node.role==manager
+      restart_policy:
+        condition: any
+        delay: 5s
+
+@endif
+@if($has_ssr)
+  #############################################
+  # Inertia SSR Service
+  #############################################
+  ssr:
+    image: ${{ '{' }}DOCKER_REGISTRY{{ '}' }}/{{ $app_name }}:${{ '{' }}IMAGE_TAG:-latest{{ '}' }}
+    command: php artisan inertia:start-ssr
+    environment:
+      - APP_KEY=${{ '{' }}APP_KEY{{ '}' }}
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+    volumes:
+      - storage-private:/var/www/html/storage/app/private
+      - storage-logs:/var/www/html/storage/logs
+    networks:
+      - app-internal
+    deploy:
+      replicas: 1
       restart_policy:
         condition: any
         delay: 5s

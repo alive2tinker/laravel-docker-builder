@@ -102,6 +102,14 @@ readonly class ServiceDTO
         );
     }
 
+    public static function ssr(): self
+    {
+        return new self(
+            name: 'ssr',
+            type: 'ssr',
+        );
+    }
+
     public static function mailpit(): self
     {
         return new self(
